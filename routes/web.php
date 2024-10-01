@@ -53,10 +53,10 @@ Route::post('/incorrectAnswered/{id}/{sectionID}',[MemberPages::class,'clickedIn
 Route::get('/exam/overview',[examController::class,'examOverview'])->name('ExamOverview');
 
 Route::post('/exam/create',[examController::class,'createExam'])->name('createExam.func');
-Route::get('/exam/getSections',[examController::class,'getSections'])->name('getSections');
-Route::get('/exam/getQuestsFromSection/{id}',[examController::class,'getQuestsFromSection'])->name('getQuestsFromSection.page');//section id
-Route::get('/exam/addingExamQuest/{id}',[examController::class,'AddQuestToTempTable'])->name('AddQuestToTempTable.func');//question id and form
-Route::post('/exam/RemoveFromTemp/{id}',[examController::class,'removeQuestFromTempTable'])->name('RemoveQuestToTempTable.func');//question id and form
+Route::get('/exam/getSections/{examId}',[examController::class,'getSections'])->name('getSections');
+Route::get('/exam/getQuestsFromSection/{sectionId}/{examId}',[examController::class,'getQuestsFromSection'])->name('getQuestsFromSection.page');//section id
+Route::get('/exam/addingExamQuest/{QuestId}/{examid}',action: [examController::class,'AddQuestToTempTable'])->name('AddQuestToTempTable.func');//question id and form
+Route::get('/exam/RemoveFromTemp/{id}/{examid}',[examController::class,'removeQuestFromTempTable'])->name('RemoveQuestToTempTable.func');//question id and form
 
 
 Route::middleware(['auth:Admin'])->group(function(){

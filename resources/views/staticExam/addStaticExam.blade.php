@@ -129,34 +129,57 @@
             </div>
           @endforeach
         @endisset
-
+        {{-- for choose question for exam --}}
         @isset($quests)
-            @php
-                $counter = 1;
-            @endphp
-            @foreach ($quests as $one)
+    @php
+        Log::info($selectedQuestIDs);
+        $counter = 1;
+    @endphp
 
-                <div class="col">
-                <div class="card shadow-sm">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                    <div class="card-body">
-                    <p class="card-text">{{$counter}}. {{ $one->Title}}.</p>
+    @foreach ($quests as $one)
+        @php
+            $checker = isset($selectedQuestIDs) && !empty($selectedQuestIDs)
+                        ? array_search($one->id, $selectedQuestIDs)
+                        : null;
+        @endphp
+
+        <div class="col">
+            <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"/>
+                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                </svg>
+                <div class="card-body">
+                    <p class="card-text">{{ $counter }}. {{ $one->Title }}.</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                        <a href="#"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
-                        <a href="{{route('AddQuestToTempTable.func',$one->id)}}"><button type="button" class="btn btn-sm btn-outline-secondary">Choose</button></a>
+                            <a href="#">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                            </a>
+                            @if ($checker !== false && isset($selectedQuestIDs[$checker]) && $selectedQuestIDs[$checker] === $one->id)
 
+                                <a href="{{ route('RemoveQuestToTempTable.func', [$one->id, $examId]) }}">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Remove</button>
+                                </a>
+                            @else
+                                <a href="{{ route('AddQuestToTempTable.func', [$one->id, $examId]) }}">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Choose</button>
+                                </a>
+                            @endif
                         </div>
                         <small class="text-body-secondary">9 mins</small>
                     </div>
-                    </div>
                 </div>
-                </div>
-                @php
-                    $counter++;
-                @endphp
-          @endforeach
-        @endisset
+            </div>
+        </div>
+
+        @php
+            $counter++;
+        @endphp
+    @endforeach
+@endisset
+
         {{-- <div class="col">
           <div class="card shadow-sm">
             <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>

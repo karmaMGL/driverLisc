@@ -27,45 +27,50 @@ class examController extends Controller
         $newdata->save();
         return redirect()->back();
     }
-    public function getSections(){
+    public function getSections($examId){
         $section = Section::all();
-
-        $page = view('staticExam.chooseExamSection',['sections'=>$section]);
+        Log::info('where'.$examId);
+        $page = view('staticExam.chooseExamSection',['sections'=>$section,'examId'=>$examId ]);
         return view('adminLayout.adminLayout',['sections'=>$page] );
     }
-    public function getQuestsFromSection(){
-        $quest = question::all();
-        $overly = view('staticExam.addStaticExam',['quests'=>$quest]);
+    public function getQuestsFromSection($sectionId,$examId){
+        $quest = question::where('SectionIDSelected',$sectionId)->get();
+        $selectedQuestIDs =json_decode(ExamPrep::find($examId)->selectedQuestIDs,true);
+        $overly = view('staticExam.addStaticExam',['quests'=>$quest,'examId'=>$examId ,'selectedQuestIDs'=>$selectedQuestIDs ]);
         return view('adminLayout.adminLayout',['content'=> $overly]);
     }
 
-    public function AddQuestToTempTable(Request $request,$id)
+    public function AddQuestToTempTable($QuestId,$examId)
     {
-        $data = ExamPrep::find(Auth::guard('Admin')->id());// -------------------- this needs a work (logical)
-        if(isEmpty($data)){
-            Log::info('not Found data');
-            $newdata = new ExamPrep();
-            $newdata->name = $request->name;
-            $question = question::find($id);
-            $newdata->selectedQuestIDs = json_encode($question->id );
-            $newdata->adminID = Auth::guard('Admin')->id();
-            $newdata->save();
+        $data = ExamPrep::find($examId);// -------------------- this needs a work (logical)
+
+        if( !empty($data) ){
+            //$data->name = Auth::guard('Admin')->user()->email;
+            //$question = question::find($QuestId);
+            $oldData = json_decode($data->selectedQuestIDs);
+            Log::info($oldData);
+            $oldData[] =  question::find( $QuestId)->id;
+            $data->selectedQuestIDs = json_encode($oldData );
+            $data->adminID = Auth::guard('Admin')->id();
+            $data->save();
         }
-        else{
-            Log::info('Founded old data');
-            if( $data->isFinished == true){
-                $data->name = $request->name;
-                $question = question::find($id);
-                $oldData = json_decode($data->selectedQuestIDs);
-                $oldData[] =  question::find($id);
-                $data->selectedQuestIDs = json_encode($question->id );
-                $data->adminID = Auth::guard('Admin')->id();
-                $data->save();
-            }
-        }
+
         return redirect()->back();
     }
-    public function removeQuestFromTempTable($id){
+    public function removeQuestFromTempTable($QuestId,$examId){
+        $data = ExamPrep::find($examId);// -------------------- this needs a work (logical)
+
+        if( !empty($data) ){
+            $selectedId = json_decode(ExamPrep::find($examId)->selectedQuestIDs);
+            unset($selectedId[array_search($QuestId,$selectedId)]);
+            //$data->name = Auth::guard('Admin')->user()->email;
+            //$question = question::find($QuestId);
+
+            $data->selectedQuestIDs = json_encode($selectedId );
+            $data->adminID = Auth::guard('Admin')->id();
+            $data->save();
+        }
+
         return redirect()->back();
     }
 }

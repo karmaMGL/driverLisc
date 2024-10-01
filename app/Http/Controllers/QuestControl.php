@@ -52,7 +52,7 @@ class QuestControl extends Controller
         $store->CorrectAnswer = $request['correctAnswer'];
         $store->SectionIDSelected  = $request->sectionNumberSelectedId;
         $store->save();
-        return redirect('/');
+        return redirect()->back();
     }
     public function AddSection(Request $request){
         //$sec = new Section;
@@ -61,7 +61,7 @@ class QuestControl extends Controller
             'SectionNumber'=>'required|numeric'
         ]);
         Section::create(['title'=>$request->title,'SectionNumber'=>$request->SectionNumber]);
-        return redirect('/');
+        return redirect()->back();
     }
     /**
      * Display the specified resource.
@@ -82,7 +82,6 @@ class QuestControl extends Controller
             $data->ImagePath=asset('public/'.$fileName);
         }
         $data->save();
-                                                                                            // im working here
         return redirect('/admin/questionOverview');
     }
     /**
@@ -109,19 +108,5 @@ class QuestControl extends Controller
         $overlay = view('editPages.editQuestion',['data'=> $data,'options'=>$options, 'section'=> $section,'selectedSection'=>$selectedSection]);
         return view('adminLayout.adminLayout',['content'=>$overlay]);
     }
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, question $question)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(question $question)
-    {
-        //
-    }
+    
 }

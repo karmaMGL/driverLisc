@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->integer('selectedQuestIDs')->nullable(true);
+            $table->text('selectedQuestIDs')->nullable(true);
             $table->boolean('isFinished')->default(false);
             $table->integer('adminID');
         });

@@ -80,12 +80,7 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{route('getSections')}}">
-              <i class="mdi mdi-table-large menu-icon"></i>
-              <span class="menu-title">Exams</span>
-            </a>
-          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{{route('ExamOverview')}}">
               <i class="mdi mdi-table-large menu-icon"></i>
