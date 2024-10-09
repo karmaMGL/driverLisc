@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Charts\TestChart;
+use App\Models\examPerformance;
+use App\Models\ExamPrep;
 use App\Models\question;
 use App\Models\Section;
 use App\Models\Member;
@@ -49,6 +51,72 @@ class MemberPages extends Controller
 
         return view("websiteMainFiles.courses",['MatchSection'=>$SectionNumber,'QuestionCounts'=>$Counts,'Title'=>$names]);
     }
+    // ---------------------------------------------------------------------> exam stuffs
+    public function examSectionPage(){
+        $exams = ExamPrep::all();
+        return view('websiteMainFiles.courses',['exams'=>$exams]);
+    }
+    public function examGetQuestions($examId){
+        $exam = ExamPrep::find($examId);
+        $examQuests = [];
+        $numbers = json_decode($exam->selectedQuestIDs);
+        foreach($numbers as $Number){
+            $question = Question::find($Number);
+            $examQuests[] = $question;
+        }
+        return view('staticExam.enteredExam',['examQuests'=>$examQuests,'examData'=>$exam]);
+    }
+    public function submitExam(Request $request)
+    {
+        Log::info($request);
+        $answers = $request->input('answers'); // Ensure we are getting the answers
+        $results = [];
+        $errorCount = 0;
+        $correctCount =0;
+        foreach ($answers as $answer) {
+            // Assuming you have a Question model and a 'id' field for question identification
+            $question = Question::find($answer['questionNumber']); // Make sure questionNumber matches the ID
+
+            if ($question) {
+                $isCorrect = $question->CorrectAnswer === $answer['selectedAnswer'];
+                $results[] = [
+                    'correct' => $isCorrect,
+                    'correctAnswer' => $question->CorrectAnswer
+                ];
+
+                if (!$isCorrect) {
+                    $errorCount++;
+                }
+                else{
+                    $correctCount++;
+                }
+            }
+        }
+        if(Auth::guard('Member')->check()){
+            Log::info(Auth::guard('Member')->check());
+            $performancetable = new examPerformance();
+            $performancetable->ExamID= $request->input('examid');
+            $performancetable->ExamTakenDate = Carbon::now()->format('Y-m-d');
+            $performancetable->userID = Auth::guard('Member')->user()->id;
+            $performancetable->correctAnswered = $correctCount;
+            $performancetable->inCorrectAnswered = $errorCount;
+            if($errorCount>=3){
+                $performancetable->isPassed = false;
+            }
+            else{
+                $performancetable->isPassed = true;
+            }
+            $performancetable->save();
+        }
+        // Handle too many errors
+        if ($errorCount > 5) {
+            return response()->json(['message' => 'Too many errors.'], 400); // Example error response
+        }
+
+        return response()->json(['results' => $results]); // Return the results as JSON
+    }
+
+// -----------------------------------------test? idk
     public function openSectionPage($SectionNumber){
         $dataSec = Section::where('SectionNumber','like',$SectionNumber)->first();
         $id = $dataSec->id;
@@ -144,53 +212,5 @@ class MemberPages extends Controller
             'message' => 'Incorrect answer recorded',
             'status' => 'error'
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

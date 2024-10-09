@@ -151,14 +151,22 @@
                     <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
                 </svg>
                 <div class="card-body">
-                    <p class="card-text">{{ $counter }}. {{ $one->Title }}.</p>
+                    <p class="card-text">{{ $counter }}) {{ $one->Title }}.</p>
+                    @php
+                        $options = json_decode($one->Options,true);
+                    @endphp
+                    <ol>
+                        @foreach ( $options as $option)
+                            <li>{{ $option}}</li>
+                        @endforeach
+                    </ol>
+                    <p>correct answer: <span style="font-weight: bold">{{$one->CorrectAnswer}}</span></p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="#">
+                            {{-- <a href="#">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                            </a>
+                            </a> --}}
                             @if ($checker !== false && isset($selectedQuestIDs[$checker]) && $selectedQuestIDs[$checker] === $one->id)
-
                                 <a href="{{ route('RemoveQuestToTempTable.func', [$one->id, $examId]) }}">
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Remove</button>
                                 </a>
@@ -168,7 +176,7 @@
                                 </a>
                             @endif
                         </div>
-                        <small class="text-body-secondary">9 mins</small>
+                        <small class="text-body-secondary">...</small>
                     </div>
                 </div>
             </div>

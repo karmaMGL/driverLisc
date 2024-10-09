@@ -42,11 +42,9 @@ class examController extends Controller
 
     public function AddQuestToTempTable($QuestId,$examId)
     {
-        $data = ExamPrep::find($examId);// -------------------- this needs a work (logical)
-
+        $data = ExamPrep::find($examId);
         if( !empty($data) ){
-            //$data->name = Auth::guard('Admin')->user()->email;
-            //$question = question::find($QuestId);
+
             $oldData = json_decode($data->selectedQuestIDs);
             Log::info($oldData);
             $oldData[] =  question::find( $QuestId)->id;
@@ -58,14 +56,11 @@ class examController extends Controller
         return redirect()->back();
     }
     public function removeQuestFromTempTable($QuestId,$examId){
-        $data = ExamPrep::find($examId);// -------------------- this needs a work (logical)
+        $data = ExamPrep::find($examId);
 
         if( !empty($data) ){
             $selectedId = json_decode(ExamPrep::find($examId)->selectedQuestIDs);
             unset($selectedId[array_search($QuestId,$selectedId)]);
-            //$data->name = Auth::guard('Admin')->user()->email;
-            //$question = question::find($QuestId);
-
             $data->selectedQuestIDs = json_encode($selectedId );
             $data->adminID = Auth::guard('Admin')->id();
             $data->save();

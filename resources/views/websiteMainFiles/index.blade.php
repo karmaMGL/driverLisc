@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
+                {{-- <div class="carousel-item">
                     <img class="w-100" src="websiteMainFiles/img/carousel-2.jpg" alt="Image">
                     <div class="carousel-caption">
                         <div class="container">
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
                 data-bs-slide="prev">
@@ -212,7 +212,7 @@
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="h-100">
                         <h6 class="text-primary text-uppercase mb-2">About Us</h6>
-                        <h1 class="display-6 mb-4">Бид оюутнуудад эхний оролдлогоор шалгалт өгч, лиценз авахад нь тусалдаг </h1>
+                        <h1 class="display-6 mb-4">Бид сурагчидад эхний оролдлогоор жолооны үнэмлэх  авахад нь тусалдаг </h1>
                         <p>Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
                         <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
                         <div class="row g-2 mb-4 pb-2">
@@ -310,7 +310,7 @@
                         <div class="position-relative mt-auto">
                             <img class="img-fluid" src="websiteMainFiles/img/courses-3.jpg" alt="">
                             <div class="courses-overlay">
-                                <a class="btn btn-outline-primary border-2" href="">Шалгалт өгөх</a>
+                                <a class="btn btn-outline-primary border-2" href="{{route('exam.section')}}">Шалгалт өгөх</a>
                             </div>
                         </div>
                     </div>

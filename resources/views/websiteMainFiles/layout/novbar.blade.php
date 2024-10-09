@@ -32,11 +32,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{route('main')}}" class="nav-item nav-link">Home</a>
-            <a href="about.html" class="nav-item nav-link">About</a>
-            <a href="{{route('main.test')}}" class="nav-item nav-link active">Courses</a>
+            <a href="{{route('main')}}" class="nav-item nav-link active">нүүр хуудас</a>
+            <a href="about.html" class="nav-item nav-link"></a>
+            <a href="{{route('main.test')}}" class="nav-item nav-link ">тестүүд</a>
+            <a href="{{route('main.test')}}" class="nav-item nav-link ">Замын тэмдэг</a>
+
+            <a href="{{route('main.test')}}" class="nav-item nav-link ">шалгалтууд</a>
+
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">s</a>
                 <div class="dropdown-menu bg-light m-0">
                     <a href="feature.html" class="dropdown-item">Features</a>
                     <a href="appointment.html" class="dropdown-item">Appointment</a>
@@ -45,7 +49,7 @@
                     <a href="404.html" class="dropdown-item">404 Page</a>
                 </div>
             </div>
-            <a href="contact.html" class="nav-item nav-link">Contact</a>
+            <a href="contact.html" class="nav-item nav-link">холбоо барих</a>
         </div>
         @auth('Member')
             <a href="{{ route('MemberDashboard') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">

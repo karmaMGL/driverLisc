@@ -119,29 +119,53 @@
                         </div>
                     </div>
                 </div> --}}
-                @php
+                @isset($MatchSection)
+                    @php
                     $counter =0;
-                @endphp
-                @foreach ($MatchSection as $sec)
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
-                            <div class="text-center p-4 pt-0">
-                                <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
+                    @endphp
+                    @foreach ($MatchSection as $sec)
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
+                                <div class="text-center p-4 pt-0">
+                                    <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
 
-                                <h5 class="mb-3">{{$sec}} {{$Title[$counter]}}</h5>
-                                <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
-                                <p>Total tests: {{$QuestionCounts[$counter]}}</p>
-                            </div>
-                            <div class="position-relative mt-auto">
-                                <img class="img-fluid" src="websiteMainFiles/img/courses-1.jpg" alt="">
-                                <div class="courses-overlay">
-                                    <a class="btn btn-outline-primary border-2" href="{{route('OpenSection',$sec)}}">Read More</a>
+                                    <h5 class="mb-3">{{$sec}} {{$Title[$counter]}}</h5>
+                                    <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
+                                    <p>Total tests: {{$QuestionCounts[$counter]}}</p>
+                                </div>
+                                <div class="position-relative mt-auto">
+                                    <img class="img-fluid" src="websiteMainFiles/img/courses-1.jpg" alt="">
+                                    <div class="courses-overlay">
+                                        <a class="btn btn-outline-primary border-2" href="{{route('OpenSection',$sec)}}">Read More</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @php $counter++; @endphp
-                @endforeach
+                        @php $counter++; @endphp
+                    @endforeach
+                @endisset
+                @isset($exams)
+
+                    @foreach ($exams as $exam)
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
+                                <div class="text-center p-4 pt-0">
+                                    <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
+
+                                    <h5 class="mb-3"> {{$exam->name}}</h5>
+                                    <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
+                                    <p>Total tests: {{count(json_decode($exam->selectedQuestIDs,true))}}</p>
+                                </div>
+                                <div class="position-relative mt-auto">
+                                    <img class="img-fluid" src="websiteMainFiles/img/courses-1.jpg" alt="">
+                                    <div class="courses-overlay">
+                                        <a class="btn btn-outline-primary border-2" href="{{route('exam.questions',[$exam->id])}}">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endisset
                 {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
                         <div class="text-center p-4 pt-0">

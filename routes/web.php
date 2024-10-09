@@ -42,9 +42,17 @@ Route::get('/logout',[MemberLoginReg::class,'logout'])->name('logout');
 
 Route::get('/registerPage',[MemberLoginReg::class,'registerPage'])->name('registerPage');
 Route::post('/registerFunc',[MemberLoginReg::class,'registerFunc'])->name('registerFuncs');
-// choosing sections
+// choosing sections test
 Route::get('/Sections',[MemberPages::class,'SectionsPage'])->name('SectionPage');
 Route::get('/OpenSection/{SectionNumber}',[MemberPages::class,'openSectionPage'])->name('OpenSection');
+
+
+// choosing exam
+Route::get('/exam/Sections',[MemberPages::class,'examSectionPage'])->name('exam.section');
+Route::get('/exam/Sections/{examId}',[MemberPages::class,'examGetQuestions'])->name('exam.questions');
+Route::post('/submit-exam',[MemberPages::class,'submitExam'])->name('submitExam');
+
+
 // tests section  check correct answer
 
 Route::post('/correctAnswered/{id}/{sectionID}',[MemberPages::class,'clickedCorrectAnswer'])->name('correctAnswered');
