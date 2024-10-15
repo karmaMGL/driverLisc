@@ -24,7 +24,7 @@
     <link href="{{asset('websiteMainFiles/css/style.css')}}" rel="stylesheet">
 </header>
 <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
-    <a href="index.html" class="navbar-brand d-flex align-items-center border-end px-4 px-lg-5">
+    <a href="{{route('main')}}" class="navbar-brand d-flex align-items-center border-end px-4 px-lg-5">
         <h2 class="m-0"><i class="fa fa-car text-primary me-2"></i>Drivin</h2>
     </a>
     <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -32,12 +32,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="{{route('main')}}" class="nav-item nav-link active">нүүр хуудас</a>
-            <a href="about.html" class="nav-item nav-link"></a>
-            <a href="{{route('main.test')}}" class="nav-item nav-link ">тестүүд</a>
-            <a href="{{route('main.test')}}" class="nav-item nav-link ">Замын тэмдэг</a>
 
-            <a href="{{route('main.test')}}" class="nav-item nav-link ">шалгалтууд</a>
+            <a href="{{route('main')}}" class="nav-item nav-link @if (session('member')== 'home') active @endif">нүүр хуудас</a>
+            <a href="about.html" class="nav-item nav-link"></a>
+            <a href="{{route('main.test')}}" class="nav-item nav-link @if (session('member')== 'tests') active @endif">тестүүд</a>
+            <a href="{{route('roadSigns')}}" class="nav-item nav-link @if (session('member')== 'roadSigns') active @endif">Замын тэмдэг</a>
+
+            <a href="{{route('exam.section')}}" class="nav-item nav-link @if (session('member')== 'exams') active @endif">шалгалтууд</a>
 
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">s</a>
@@ -49,7 +50,7 @@
                     <a href="404.html" class="dropdown-item">404 Page</a>
                 </div>
             </div>
-            <a href="contact.html" class="nav-item nav-link">холбоо барих</a>
+            <a href="{{route('contact')}}" class="nav-item nav-link @if (session('member')== 'contact') active @endif">холбоо барих</a>
         </div>
         @auth('Member')
             <a href="{{ route('MemberDashboard') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">

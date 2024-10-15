@@ -78,12 +78,22 @@
     <!-- Page Header Start -->
     <div class="container-fluid page-header py-6 my-6 mt-0 wow fadeIn" data-wow-delay="0.1s">
         <div class="container text-center">
-            <h1 class="display-4 text-white animated slideInDown mb-4">Тестүүд</h1>
+            @isset($MatchSection)
+                <h1 class="display-4 text-white animated slideInDown mb-4">Тестүүд</h1>
+            @endisset
+            @isset($exams)
+                <h1 class="display-4 text-white animated slideInDown mb-4">шалгалтууд</h1>
+            @endisset
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb justify-content-center mb-0">
                     <li class="breadcrumb-item"><a class="text-white" href="{{route('main')}}">Home</a></li>
                     <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-primary active" aria-current="page">Тестүүд</li>
+                    @isset($MatchSection)
+                        <li class="breadcrumb-item text-primary active" aria-current="page">Тестүүд</li>
+                    @endisset
+                    @isset($exams)
+                        <li class="breadcrumb-item text-primary active" aria-current="page">шалгалтууд</li>
+                    @endisset
                 </ol>
             </nav>
         </div>
@@ -95,8 +105,13 @@
     <div class="container-xxl py-6">
         <div class="container">
             <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                <h6 class="text-primary text-uppercase mb-2">Тестүүд</h6>
-                <h1 class="display-6 mb-4">Our Courses Upskill You With Driving Training</h1>
+                @isset($MatchSection)
+                    <h6 class="text-primary text-uppercase mb-2">Тестүүд</h6>
+                @endisset
+                @isset($exams)
+                    <h6 class="text-primary text-uppercase mb-2">шалгалтууд</h6>
+                @endisset
+                <h1 class="display-6 mb-4">....</h1>
             </div>
             <div class="row g-4 justify-content-center">
                 {{-- 1 cell
@@ -130,7 +145,7 @@
                                     <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
 
                                     <h5 class="mb-3">{{$sec}} {{$Title[$counter]}}</h5>
-                                    <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
+                                    <p>...</p>
                                     <p>Total tests: {{$QuestionCounts[$counter]}}</p>
                                 </div>
                                 <div class="position-relative mt-auto">
@@ -153,8 +168,8 @@
                                     <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
 
                                     <h5 class="mb-3"> {{$exam->name}}</h5>
-                                    <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
-                                    <p>Total tests: {{count(json_decode($exam->selectedQuestIDs,true))}}</p>
+                                    <p>...</p>
+                                    <p>нийт даалгавар: {{count(json_decode($exam->selectedQuestIDs,true))}}</p>
                                 </div>
                                 <div class="position-relative mt-auto">
                                     <img class="img-fluid" src="websiteMainFiles/img/courses-1.jpg" alt="">
@@ -166,6 +181,38 @@
                         </div>
                     @endforeach
                 @endisset
+                @isset($roadSigns)
+                    @foreach ($roadSigns as $roadSign)
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
+                                <div class="text-center p-4 pt-0">
+                                    <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
+                                    <h5 class="mb-3"> {{$roadSign->name}}</h5>
+                                    <p>...</p>
+                                </div>
+                                <div class="position-relative mt-auto">
+                                    <img class="img-fluid" src="{{ asset($roadSign->imagePath) }}" alt="{{ $roadSign->name }}" data-bs-toggle="modal" data-bs-target="#roadSignModal{{ $roadSign->id }}">
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="roadSignModal{{ $roadSign->id }}" tabindex="-1" aria-labelledby="roadSignModalLabel{{ $roadSign->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <img src="{{ asset($roadSign->imagePath) }}" class="img-fluid" alt="{{ $roadSign->name }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endisset
+
                 {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="courses-item d-flex flex-column bg-light overflow-hidden h-100">
                         <div class="text-center p-4 pt-0">

@@ -16,11 +16,7 @@ return new class extends Migration
 
             $table->timestamps(); // Created and updated timestamps
 
-            $table->unsignedBigInteger('userID'); // Foreign key to the members table
-            $table->foreign('userID')
-                  ->references('id')
-                  ->on('members') // Ensure this table exists first
-                  ->onDelete('cascade'); // Delete related exam performances if the member is deleted
+            $table->integer('userID'); // Foreign key to the members table
 
             $table->date('ExamTakenDate'); // Date of the exam
             $table->integer('correctAnswered')->default(0); // Number of correct answers

@@ -112,9 +112,9 @@
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-lg-7">
-                                    <h1 class="display-2 text-light mb-5 animated slideInDown">Learn To Drive With Confidence</h1>
-                                    <a href="" class="btn btn-primary py-sm-3 px-sm-5">Learn More</a>
-                                    <a href="" class="btn btn-light py-sm-3 px-sm-5 ms-3">Our Courses</a>
+                                    <h1 class="display-2 text-light mb-5 animated slideInDown">Cайн жолооч болцгооё</h1>
+                                    <a href="" class="btn btn-primary py-sm-3 px-sm-5">Xолбоо барих</a>
+                                    <a href="" class="btn btn-light py-sm-3 px-sm-5 ms-3">бидний бөглөх тестүүд</a>
                                 </div>
                             </div>
                         </div>
@@ -291,7 +291,7 @@
                         <div class="position-relative mt-auto">
                             <img class="img-fluid" src="websiteMainFiles/img/courses-2.jpg" alt="">
                             <div class="courses-overlay">
-                                <a class="btn btn-outline-primary border-2" href="">Тест өгөх</a>
+                                <a class="btn btn-outline-primary border-2" href="{{route('roadSigns')}}">Замын тэмдэг үүд</a>
                             </div>
                         </div>
                     </div>

@@ -88,6 +88,20 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{{route('roadsign.overview.page')}}">
+              <i class="mdi mdi-table-large menu-icon"></i>
+              <span class="menu-title">Road Signs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('roadsign.add.page')}}">
+              <i class="mdi mdi-table-large menu-icon"></i>
+              <span class="menu-title">Add Road Sign</span>
+            </a>
+          </li>
+
+
+          <li class="nav-item">
             <span class="nav-link" href="#">
               <span class="menu-title">Docs</span>
             </span>

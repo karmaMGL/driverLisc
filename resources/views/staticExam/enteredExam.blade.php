@@ -212,7 +212,16 @@
                     <div class="options-grid">
                         @php $options = json_decode($quest->Options, true); @endphp
                         @if (is_array($options))
-                            @foreach ($options as $item)
+                            @php
+                                $randomized = $options;
+                                for ($i=0; $i < count($randomized)-1; $i++) {
+                                    $num = rand(0,count($randomized)-1);
+                                    $temp = $randomized[$i];
+                                    $randomized[$i] = $randomized[$num];
+                                    $randomized[$num]  = $temp;
+                                }
+                            @endphp
+                            @foreach ($randomized as $item)
                                 <button class="option-button" onclick='selectAnswer({{$counter}}, "{{$item}}", "{{$quest->CorrectAnswer}}", this)'>{{$item}}</button>
                             @endforeach
                         @endif

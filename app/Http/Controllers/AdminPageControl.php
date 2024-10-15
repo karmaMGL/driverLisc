@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\question;
+use App\Models\roadSign;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,43 +46,17 @@ class AdminPageControl extends Controller
         $page = view('editPages.questionOverview',['sections'=>$section]);
         return view('adminLayout.adminLayout',['content'=>  $page ]);
     }
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function overviewRoadSigns(){
+        $data = roadSign::all();
+        $layout = view('roadSign.roadSignOverview' , ['roadSigns'=>$data]);
+        return view('adminLayout.adminLayout',['content'=>$layout]);
+    }
+    public function addRoadSignPage(){
+        $layout = view('roadSign.addRoadSign');
+        return view('adminLayout.adminLayout',['content'=>$layout]);
+    }
+    public function editRoadSignPage($id){
+        return view('',['id'=>$id]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -6,6 +6,7 @@ use App\Charts\TestChart;
 use App\Models\examPerformance;
 use App\Models\ExamPrep;
 use App\Models\question;
+use App\Models\roadSign;
 use App\Models\Section;
 use App\Models\Member;
 use App\Models\performance;
@@ -34,7 +35,7 @@ class MemberPages extends Controller
             $Counts[] = $questions->where('SectionIDSelected',$SectionOne->id)->count();
             $names[] = $SectionOne->title;
         }
-
+        session(['member'=> 'home']);
         return view("websiteMainFiles.index",['MatchSection'=>$SectionNumber,'QuestionCounts'=>$Counts,'Title'=>$names]);
     }
     public function SectionsPage(){
@@ -42,6 +43,7 @@ class MemberPages extends Controller
         $SectionNumber = [];
         $names = [];
         $questions = question::all();
+        session(['member'=> 'tests']);
 
         foreach(Section::all() as $SectionOne){
             $SectionNumber[] = $SectionOne->SectionNumber;
@@ -54,6 +56,7 @@ class MemberPages extends Controller
     // ---------------------------------------------------------------------> exam stuffs
     public function examSectionPage(){
         $exams = ExamPrep::all();
+        session(['member'=> 'exams']);
         return view('websiteMainFiles.courses',['exams'=>$exams]);
     }
     public function examGetQuestions($examId){
@@ -115,7 +118,12 @@ class MemberPages extends Controller
 
         return response()->json(['results' => $results]); // Return the results as JSON
     }
-
+    // ---------------------------------------->road sign page and test
+    public function roadSignsPage(){
+        session(['member'=> 'roadSigns']);
+        $roadSigns =  roadSign::all();
+        return view('websiteMainFiles.courses',['roadSigns'=>$roadSigns]);
+    }
 // -----------------------------------------test? idk
     public function openSectionPage($SectionNumber){
         $dataSec = Section::where('SectionNumber','like',$SectionNumber)->first();
@@ -150,9 +158,6 @@ class MemberPages extends Controller
 
         return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data]);
     }
-
-
-
 
     public function clickedCorrectAnswer(Request $request , $id,$sectionID) {
         $member = Auth::guard('Member')->user();
@@ -212,5 +217,9 @@ class MemberPages extends Controller
             'message' => 'Incorrect answer recorded',
             'status' => 'error'
         ]);
+    }
+    public function contactUs(){
+        session(['member'=>'contact']);
+        return view('websiteMainFiles.contact');
     }
 }
