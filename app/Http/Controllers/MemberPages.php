@@ -140,11 +140,15 @@ class MemberPages extends Controller
         $datas = Member::where('id', $id)->first();
         $performaneOfmember = performance::where('userID',$id)->get();
         $data = [];
-        Log::info($performaneOfmember);
+        $correct =0;
+        $incorrect = 0;
         foreach($performaneOfmember as $per){
-            $data[] = ['label'=>$per->testTakenDate, 'value'=>$per->correctAnswered];
-
+            $data[] = ['label'=>$per->testTakenDate, 'correct'=>$per->correctAnswered,'incorrect'=>$per->inCorrectAnswered];
+            $correct= $correct+$per->correctAnswered;
+            $incorrect=  $incorrect+ $per->inCorrectAnswered;
         }
+
+        $totalNumbers = ['incorrect'=>$incorrect , 'correct'=>$correct,'testsTaken'=>count(examPerformance::where('userID',Auth::guard('Member')->user()->id)->get())];
 
         // $data = [
         //     ['label' => 'A', 'value' => 30],
@@ -156,7 +160,7 @@ class MemberPages extends Controller
         //     ['label' => 'G', 'value' => 55]
         // ];
 
-        return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data]);
+        return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers ]);
     }
 
     public function clickedCorrectAnswer(Request $request , $id,$sectionID) {
