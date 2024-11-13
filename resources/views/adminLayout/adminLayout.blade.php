@@ -41,7 +41,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="mdi mdi-crosshairs-gps menu-icon"></i>
               <span class="menu-title">Basic UI Elements</span>
@@ -60,7 +60,7 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> --}}
           <li class="nav-item">
             <a class="nav-link" href="{{route('questionOverview')}}">
               <i class="mdi mdi-contacts menu-icon"></i>
@@ -101,7 +101,7 @@
           </li>
 
 
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <span class="nav-link" href="#">
               <span class="menu-title">Docs</span>
             </span>
@@ -111,15 +111,15 @@
               <i class="mdi mdi-file-document-box menu-icon"></i>
               <span class="menu-title">Documentation</span>
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item sidebar-actions">
             <div class="nav-link">
               <div class="mt-4">
                 <div class="border-none">
-                  <p class="text-black">Notification</p>
+                  <p class="text-black"></p>
                 </div>
                 <ul class="mt-4 pl-0">
-                  <li>Sign Out</li>
+                  <a href="{{route('logout')}}"><li>Sign Out</li></a>
                 </ul>
               </div>
             </div>
@@ -250,7 +250,7 @@
                 <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
                   <a class="dropdown-item" href="#">
                     <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="{{route('logout')}}">
                     <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>
                 </div>
               </li>

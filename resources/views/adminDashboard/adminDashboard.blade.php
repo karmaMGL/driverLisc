@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-sm ml-3 btn-success"> Add User </button>
               </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
               <div class="col-xl-3 col-lg-12 stretch-card grid-margin">
                 <div class="row">
                   <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
@@ -796,7 +796,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> --}}
                 <!--browser stats ends-->
               </div>
             </div>

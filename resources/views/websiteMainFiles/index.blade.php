@@ -114,7 +114,7 @@
                                 <div class="col-lg-7">
                                     <h1 class="display-2 text-light mb-5 animated slideInDown">Cайн жолооч болцгооё</h1>
                                     <a href="" class="btn btn-primary py-sm-3 px-sm-5">Xолбоо барих</a>
-                                    <a href="" class="btn btn-light py-sm-3 px-sm-5 ms-3">бидний бөглөх тестүүд</a>
+                                    <a href="" class="btn btn-light py-sm-3 px-sm-5 ms-3">Бөглөх тестүүд</a>
                                 </div>
                             </div>
                         </div>
@@ -211,27 +211,27 @@
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="h-100">
-                        <h6 class="text-primary text-uppercase mb-2">About Us</h6>
+                        <h6 class="text-primary text-uppercase mb-2">Бидний тухай</h6>
                         <h1 class="display-6 mb-4">Бид сурагчидад эхний оролдлогоор жолооны үнэмлэх  авахад нь тусалдаг </h1>
-                        <p>Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-                        <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+                        <p>...</p>
+                        <p class="mb-4">...</p>
                         <div class="row g-2 mb-4 pb-2">
                             <div class="col-sm-6">
-                                <i class="fa fa-check text-primary me-2"></i>Fully Licensed
+                                <i class="fa fa-check text-primary me-2"></i>Ахиц дэвшлээ хянах
                             </div>
                             <div class="col-sm-6">
-                                <i class="fa fa-check text-primary me-2"></i>Online Tracking
+                                <i class="fa fa-check text-primary me-2"></i>Сорилтууд
                             </div>
                             <div class="col-sm-6">
-                                <i class="fa fa-check text-primary me-2"></i>Afordable Fee
+                                <i class="fa fa-check text-primary me-2"></i>Боломжийн төлбөр
                             </div>
                             <div class="col-sm-6">
-                                <i class="fa fa-check text-primary me-2"></i>Best Trainers
+                                <i class="fa fa-check text-primary me-2"></i>...
                             </div>
                         </div>
                         <div class="row g-4">
                             <div class="col-sm-6">
-                                <a class="btn btn-primary py-3 px-5" href="">Read More</a>
+                                <a class="btn btn-primary py-3 px-5" href="">Одоо бүртгүүлэх</a>
                             </div>
                             <div class="col-sm-6">
                                 <a class="d-inline-flex align-items-center btn btn-outline-primary border-2 p-2" href="tel:+0123456789">
@@ -254,7 +254,7 @@
     <div class="container-xxl courses my-6 py-6 pb-0">
         <div class="container">
             <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                <h6 class="text-primary text-uppercase mb-2">Курсууд</h6>
+                <h6 class="text-primary text-uppercase mb-2">Сорилтууд</h6>
                 <h1 class="display-6 mb-4">Манай сургалтууд таныг жолооны сургалтаар ур чадвараа дээшлүүлнэ</h1>
             </div>
             <div class="row g-4 justify-content-center">
@@ -315,7 +315,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8 my-6 mb-0 wow fadeInUp" data-wow-delay="0.1s">
+                {{-- <div class="col-lg-8 my-6 mb-0 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="bg-primary text-center p-5">
                         <h1 class="mb-4">Make Appointment</h1>
                         <form>
@@ -551,7 +551,7 @@
             </div>
         </div>
     </div>
-    <!-- Testimonial End -->
+    <!-- Testimonial End --> --}}
 
 
     <!-- Footer Start -->
