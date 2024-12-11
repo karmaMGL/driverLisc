@@ -19,10 +19,9 @@ return new class extends Migration
             $table->foreign('userID')->references('id')->on('members')->onDelete('cascade');
 
             $table->date('testTakenDate');
-            $table->integer('correctAnswered')->default(0);
-            $table->integer('inCorrectAnswered')->default(0);
-            $table->integer('answeredTests')->default(0);
-
+            $table->text('Answered');
+            $table->boolean('isCorrect')->default(false);
+            $table->integer('questID');
             $table->unsignedBigInteger('sectionID');
             $table->foreign('sectionID')->references('id')->on('sections')->onDelete('cascade');
         });

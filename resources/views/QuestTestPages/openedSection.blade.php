@@ -208,7 +208,7 @@
                                 }
                             @endphp
                             @foreach ($randomized as $item)
-                                <button class="option-button" onclick='checkAnswer({{$counter}}, "{{$item}}", "{{$data->CorrectAnswer}}")'>{{$item}}</button>
+                                <button class="option-button" onclick='checkAnswer({{$counter}}, "{{$item}}", "{{$data->CorrectAnswer}}","{{$data->id}}")'>{{$item}}</button>
                             @endforeach
                         @endif
                     </div>
@@ -239,7 +239,7 @@
             }
         }
 
-            function checkAnswer(questionNumber, selectedAnswer, correctAnswer) {
+            function checkAnswer(questionNumber, selectedAnswer, correctAnswer,questID) {
             const questionCard = document.getElementById(`question-${questionNumber}`);
             const feedbackElement = document.getElementById(`feedback-${questionNumber}`);
             const explanationElement = document.getElementById(`explanation-${questionNumber}`);
@@ -256,8 +256,15 @@
                     button.style.color = '#ffffff';
                 }
             });
-            let correctAnswerUrl = "{{ route('correctAnswered', [Auth::guard('Member')->check() ? Auth::guard('Member')->id() : '0', $SectionID]) }}";
-            let incorrectAnswerUrl = "{{ route('incorrectAnswered', [Auth::guard('Member')->check() ? Auth::guard('Member')->id() : '0', $SectionID]) }}";
+            let baseCorrectAnswerUrl = "{{ route('correctAnswered', [Auth::guard('Member')->check() ? Auth::guard('Member')->id() : '0', $SectionID, ':selectedAnswer',':questID']) }}";
+
+            let baseCorrectAnswerUrl11 = baseCorrectAnswerUrl.replace(':selectedAnswer', selectedAnswer);
+            let correctAnswerUrl = baseCorrectAnswerUrl11.replace(':questID', questID);
+
+
+            let baseCorrectAnswerUrl2 = "{{ route('incorrectAnswered', [Auth::guard('Member')->check() ? Auth::guard('Member')->id() : '0', $SectionID, ':selectedAnswer',':questID']) }}";
+            let baseCorrectAnswerUrl22 = baseCorrectAnswerUrl2.replace(':selectedAnswer', selectedAnswer);
+            incorrectAnswerUrl = baseCorrectAnswerUrl22.replace(':questID', questID);
 
 
 

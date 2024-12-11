@@ -236,7 +236,7 @@
 
 
 
-                    {{Auth::user()->name}}</span>
+                    {{Auth::guard('Member')->user()->name}}</span>
                 </a>
                 <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
                   <a class="dropdown-item" href="#">
@@ -402,15 +402,20 @@
        .call(d3.axisLeft(y).ticks(5));
 
     // Create groups for the bars
-    var bars = svg.selectAll(".bars")
-                  .data(data)
-                  .enter()
-                  .append("g")
-                  .attr("transform", d => `translate(${x0(d.label)}, 0)`);
-
-                  bars.selectAll(".bar.correct")
-    .data(d => [{key: 'correct', value: d.correct}])
+    // Create groups for the bars
+var bars = svg.selectAll(".bars")
+    .data(data)
     .enter()
+    .append("g")
+    .attr("transform", d => `translate(${x0(d.label)}, 0)`);
+
+// Add correct answer bars
+bars.selectAll(".bar.correct")
+    .data(d => [{key: 'correct', value: d.correct, url: d.correct_url}]) // Add a `url` property for navigation
+    .enter()
+    .append("a") // Wrap the bar with <a>
+    .attr("xlink:href", d => d.url) // Set the link
+    .attr("target", "_blank") // Optional: Open in new tab
     .append("rect")
     .attr("class", "bar correct")
     .attr("x", d => x1(d.key))
@@ -428,9 +433,6 @@
         hideTooltip();
         d3.select(this).style("opacity", 1);
     })
-    .on("click", function(event, d) {
-        showTooltip(event, `Correct: ${d.value}`);
-    })  // Show tooltip on click
     .transition()
     .duration(1000)
     .attr("y", d => y(d.value))
@@ -438,8 +440,11 @@
 
 // Add incorrect answer bars
 bars.selectAll(".bar.incorrect")
-    .data(d => [{key: 'incorrect', value: d.incorrect}])
+    .data(d => [{key: 'incorrect', value: d.incorrect, url: d.incorrect_url}]) // Add a `url` property for navigation
     .enter()
+    .append("a") // Wrap the bar with <a>
+    .attr("xlink:href", d => d.url) // Set the link
+    .attr("target", "_blank") // Optional: Open in new tab
     .append("rect")
     .attr("class", "bar incorrect")
     .attr("x", d => x1(d.key))
@@ -457,13 +462,11 @@ bars.selectAll(".bar.incorrect")
         hideTooltip();
         d3.select(this).style("opacity", 1);
     })
-    .on("click", function(event, d) {
-        showTooltip(event, `Incorrect: ${d.value}`);
-    })  // Show tooltip on click
     .transition()
     .duration(1000)
     .attr("y", d => y(d.value))
     .attr("height", d => height - 2 * margin - y(d.value));
+
     // Add a title
     svg.append("text")
        .attr("x", (width - 2 * margin) / 2)

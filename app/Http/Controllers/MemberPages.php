@@ -142,48 +142,52 @@ class MemberPages extends Controller
         $data = [];
         $correct =0;
         $incorrect = 0;
+        Log::alert(performance::select('testTakenDate')->distinct()->get());
         foreach($performaneOfmember as $per){
-            $data[] = ['label'=>$per->testTakenDate, 'correct'=>$per->correctAnswered,'incorrect'=>$per->inCorrectAnswered];
+            $correctCount = performance::where('testTakenDate' ,$per->testTakenDate )->where('isCorrect',true)->get()->count();
+            $incorrectCount = performance::where('testTakenDate' ,$per->testTakenDate )->where('isCorrect',false)->get()->count();
+
+            $data[] = ['label'=>$per->testTakenDate, 'correct'=>$correctCount,'incorrect'=>$incorrectCount,'correct_url'=>"/member/tests/performance/1/".$per->testTakenDate,'incorrect_url'=>"/member/tests/performance/0/".$per->testTakenDate];
             $correct= $correct+$per->correctAnswered;
             $incorrect=  $incorrect+ $per->inCorrectAnswered;
         }
 
         $totalNumbers = ['incorrect'=>$incorrect , 'correct'=>$correct,'testsTaken'=>count(examPerformance::where('userID',Auth::guard('Member')->user()->id)->get())];
 
-        // $data = [
-        //     ['label' => 'A', 'value' => 30],
-        //     ['label' => 'B', 'value' => 80],
-        //     ['label' => 'C', 'value' => 45],
-        //     ['label' => 'D', 'value' => 60],
-        //     ['label' => 'E', 'value' => 20],
-        //     ['label' => 'F', 'value' => 90],
-        //     ['label' => 'G', 'value' => 55]
-        // ];
-
         return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers ]);
     }
-
-    public function clickedCorrectAnswer(Request $request , $id,$sectionID) {
+    public function examineDate($isCorrect,$date){ // i was working here
+        Log::alert($isCorrect." ".$date);
+        $data = performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('testTakenDate',$date)->get();
+        $datas = [];
+        $questIDs = performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get();
+        foreach($questIDs as $one){
+            Log::alert($one);
+            $data[] = [
+                'label'=>Section::find(question::find($one['questID'])->SectionIDSelected).'/'.question::find($one['questID']),
+                'correct'=>performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->get()->count(),
+                'incorrect'=>0,
+            ];
+        }
+        Log::alert(performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get());
+        return view('MembersPages.layout',["data"=>$data]);
+    }
+    public function clickedCorrectAnswer(Request $request , $id,$sectionID,$answer,$questID) {
         $member = Auth::guard('Member')->user();
         $today = Carbon::now()->format('Y-m-d');
         $Checkk = performance::where('userID',$member->id)->where('testTakenDate',$today)->first();
-        Log::info($Checkk);
+        Log::info($answer);
 
-        if($Checkk){
-            $num = $Checkk->correctAnswered;
-            $Checkk->correctAnswered = $num +1;
-            $Checkk->save();
-        }
-        else
-        {
-            $newData = new performance;
-            $newData->userID = $member->id;
-            $newData->testTakenDate =  $today;
-            $num = $newData->correctAnswered;
-            $newData->correctAnswered = $num +1;
-            $newData->sectionID = $sectionID;
-            $newData->save();
-        }
+
+        $newData = new performance;
+        $newData->userID = $member->id;
+        $newData->testTakenDate =  $today;
+        $newData->questID = $questID;
+        $newData->Answered = $answer;
+        $newData->sectionID = $sectionID;
+        $newData->isCorrect = true;
+        $newData->save();
+
 
         return response()->json([
             'message' => 'Correct answer recorded',
@@ -191,31 +195,22 @@ class MemberPages extends Controller
         ]);
     }
 
-    public function clickedInCorrectAnswer(Request $request,$id,$sectionID) {
+    public function clickedInCorrectAnswer(Request $request,$id,$sectionID,$answer,$questID) {
 
         $member = Auth::guard('Member')->user();
         $today = Carbon::now()->format('Y-m-d');
         $Checkk = performance::where('userID',$member->id)->where('testTakenDate',$today)->first();
+        Log::info($answer);
 
-        if($Checkk){
-            $num = $Checkk->inCorrectAnswered;
-            $Checkk->inCorrectAnswered = $num +1;
-            $Checkk->save();
-        }
-        else
-        {
-            $newData = new performance;
-            $newData->userID = $member->id;
-            $newData->testTakenDate =  $today;
-            $num = $newData->inCorrectAnswered;
-            $newData->inCorrectAnswered = $num +1;
-            $newData->sectionID = $sectionID;
-            $newData->save();
-        }
-        // if ($member) {
-        //     $member->total_incorrect_answered += 1;
-        //     $member->save();
-        // }
+        $newData = new performance;
+        $newData->userID = $member->id;
+        $newData->testTakenDate =  $today;
+        $newData->questID = $questID;
+        $newData->Answered = $answer;
+        $newData->sectionID = $sectionID;
+        $newData->isCorrect = false;
+        $newData->save();
+
 
         return response()->json([
             'message' => 'Incorrect answer recorded',
