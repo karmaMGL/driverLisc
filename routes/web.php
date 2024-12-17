@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\adminLoginReg;
 use App\Http\Controllers\AdminPageControl;
+use App\Http\Controllers\bookController;
 use App\Http\Controllers\examController;
 use App\Http\Controllers\MemberLoginReg;
 use App\Http\Controllers\MemberPages;
@@ -23,6 +24,7 @@ Route::post('/adminLoginFunc',[adminLoginReg::class,'adminLoginFunc'])->name('ad
 
 Route::get('/addAdmin',[adminLoginReg::class,'addAdmin'])->name('addAdminDebug'); // ------------this is debug account need to be delete on release
 
+Route::get('/game',[MemberPages::class,'memberDashboard'])->name('member.game');
 //Route::get('/',[adminLoginReg::class,'AdminLoginPage'])->name('adminLoginPage');
 //Route::get('/',[adminLoginReg::class,'AdminLoginPage'])->name('adminLoginPage');
 
@@ -35,7 +37,7 @@ Route::get('/registerPage',[MemberLoginReg::class,'registerPage'])->name('regist
 Route::post('/registerFunc',[MemberLoginReg::class,'registerFunc'])->name('registerFuncs');
 // choosing sections test
 Route::get('/Sections',[MemberPages::class,'SectionsPage'])->name('SectionPage');
-Route::get('/OpenSection/{SectionNumber}',[MemberPages::class,'openSectionPage'])->name('OpenSection');
+Route::get('/OpenSection/{SectionNumber}/{questID?}',[MemberPages::class,'openSectionPage'])->name('OpenSection');
 
 // choosing exam
 Route::get('/exam/Sections',[MemberPages::class,'examSectionPage'])->name('exam.section');
@@ -53,6 +55,16 @@ Route::post('/correctAnswered/{id}/{sectionID}/{answer}/{questID}',[MemberPages:
 Route::post('/incorrectAnswered/{id}/{sectionID}/{answer}/{questID}',[MemberPages::class,'clickedInCorrectAnswer'])->name('incorrectAnswered');
 
 Route::get('/member/tests/performance/{isCorrect}/{date}',[MemberPages::class,'examineDate'])->name('member.test.performance.table');
+
+// temperal
+Route::get('/documents/{document}/sections', [bookController::class,'index'])->name('section.index');
+Route::post('/documents/{document}/sections', 'SectionController@store')->name('section.store');
+
+Route::get('/documents/{document}/sections/{id}/edit', 'SectionController@edit')->name('section.edit');
+Route::patch('/documents/{document}/sections/{id}', 'SectionController@update')->name('section.update');
+
+Route::delete('/documents/{document}/sections/{id}', 'SectionController@destroy')->name('section.delete');
+
 
 Route::middleware(['auth:Admin'])->group(function(){
     Route::get('/adminDashboard',[AdminPageControl::class,'adminDAshboard'])->name('adminDashboard');

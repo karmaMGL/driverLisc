@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
+use Illuminate\Support\Str;
 use function PHPUnit\Framework\isEmpty;
 
 class MemberPages extends Controller
@@ -125,12 +126,12 @@ class MemberPages extends Controller
         return view('websiteMainFiles.courses',['roadSigns'=>$roadSigns]);
     }
 // -----------------------------------------test? idk
-    public function openSectionPage($SectionNumber){
+    public function openSectionPage($SectionNumber,$questID=null){
         $dataSec = Section::where('SectionNumber','like',$SectionNumber)->first();
         $id = $dataSec->id;
         $data = question::where('SectionIDSelected','like',$id)->get();
         $secID = $dataSec->id;
-        return view('QuestTestPages/openedSection',['datas' => $data,'SectionID'=>$secID]);
+        return view('QuestTestPages/openedSection',['datas' => $data,'SectionID'=>$secID,'questID'=>$questID]);
     }
     // public function openTestPage($SectionNumber,$questId){
     //     return view('QuestTestPages.openTest');
@@ -153,20 +154,34 @@ class MemberPages extends Controller
         }
 
         $totalNumbers = ['incorrect'=>$incorrect , 'correct'=>$correct,'testsTaken'=>count(examPerformance::where('userID',Auth::guard('Member')->user()->id)->get())];
+        $mostFailedSections = performance::where('userID',Auth::guard('Member')->user()->id)->select('sectionID')->distinct()->get();
+        $data2 = [];
+        foreach($mostFailedSections as $one){
+            $failedCount = performance::where('userID',Auth::guard('Member')->user()->id)->where('sectionID',$one['sectionID'])->where('isCorrect',false)->get()->count();
+            $data2[] = ['label'=>Str::limit(Section::find($one['sectionID'])->title,10),'failed'=>$failedCount];
+        }
+        $data3 = [];
+        $allFailedTests = performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',false)->select('questID')->distinct()->get();
+        foreach($allFailedTests as $one){
+            $failedCount = performance::where('userID',Auth::guard('Member')->user()->id)->where('questID',$one['questID'])->where('isCorrect',false)->get()->count();
+            $data3[] = ['label'=>Str::limit(question::find($one['questID'])->Title,7,'...'),'failed'=>$failedCount];
+        }
+        $sortedData3 = collect($data3)->sortByDesc('failed')->values()->toArray();
 
-        return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers ]);
+        return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers , 'mostFailedSections'=> $data2 , 'allFailedTests'=>$sortedData3]);
     }
     public function examineDate($isCorrect,$date){ // i was working here
         Log::alert($isCorrect." ".$date);
-        $data = performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('testTakenDate',$date)->get();
+        $data = performance::where( 'userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('testTakenDate',$date)->get();
         $datas = [];
         $questIDs = performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get();
         foreach($questIDs as $one){
             Log::alert($one);
             $data[] = [
-                'label'=>Section::find(question::find($one['questID'])->SectionIDSelected).'/'.question::find($one['questID']),
-                'correct'=>performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->get()->count(),
+                'label'=>question::find($one['questID'])->Title,
+                'correct'=>performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('questID',$one['questID'])->get()->count(),
                 'incorrect'=>0,
+                'url'=>'/OpenSection'.'/'.Section::find(question::find($one['questID'])->SectionIDSelected)->id.'/'.$one['questID']
             ];
         }
         Log::alert(performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get());
