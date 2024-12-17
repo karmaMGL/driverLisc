@@ -24,7 +24,7 @@ Route::post('/adminLoginFunc',[adminLoginReg::class,'adminLoginFunc'])->name('ad
 
 Route::get('/addAdmin',[adminLoginReg::class,'addAdmin'])->name('addAdminDebug'); // ------------this is debug account need to be delete on release
 
-Route::get('/game',[MemberPages::class,'memberDashboard'])->name('member.game');
+Route::get('/game',[MemberPages::class,'game'])->name('member.game');
 //Route::get('/',[adminLoginReg::class,'AdminLoginPage'])->name('adminLoginPage');
 //Route::get('/',[adminLoginReg::class,'AdminLoginPage'])->name('adminLoginPage');
 

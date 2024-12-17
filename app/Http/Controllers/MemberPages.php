@@ -131,11 +131,14 @@ class MemberPages extends Controller
         $id = $dataSec->id;
         $data = question::where('SectionIDSelected','like',$id)->get();
         $secID = $dataSec->id;
-        return view('QuestTestPages/openedSection',['datas' => $data,'SectionID'=>$secID,'questID'=>$questID]);
+        return view('QuestTestPages/openedSection',['datas' => $data,'SectionID'=>$secID,'sectionTitle'=>$dataSec->title,'questID'=>$questID]);
     }
     // public function openTestPage($SectionNumber,$questId){
     //     return view('QuestTestPages.openTest');
     // }
+    public function game(){
+        return view('game.index');
+    }
     public function Dashboard() {
         $id = Auth::guard('Member')->user()->id;
         $datas = Member::where('id', $id)->first();
@@ -168,7 +171,7 @@ class MemberPages extends Controller
         }
         $sortedData3 = collect($data3)->sortByDesc('failed')->values()->toArray();
 
-        return view('MembersPages.Dashboard', ["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers , 'mostFailedSections'=> $data2 , 'allFailedTests'=>$sortedData3]);
+        return view('MembersPages.layout', [view('MembersPages.Dashboard',["userData" => $datas,'data'=>$data,'userDataNumber'=>$totalNumbers , 'mostFailedSections'=> $data2 , 'allFailedTests'=>$sortedData3,])]);
     }
     public function examineDate($isCorrect,$date){ // i was working here
         Log::alert($isCorrect." ".$date);
@@ -185,7 +188,7 @@ class MemberPages extends Controller
             ];
         }
         Log::alert(performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get());
-        return view('MembersPages.layout',["data"=>$data]);
+        return view('MembersPages.layout',[view('MembersPages.graphs',['data'=>$data])]);
     }
     public function clickedCorrectAnswer(Request $request , $id,$sectionID,$answer,$questID) {
         $member = Auth::guard('Member')->user();

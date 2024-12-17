@@ -1,9 +1,6 @@
 @section('content')
-<!DOCTYPE html>
-<html>
-<head>
     <title>Create Section</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         .container {
             max-width: 600px;
@@ -34,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="SectionNumber">Section Number</label>
-                <input type="number" step="0.01" class="form-control" id="SectionNumber" name="SectionNumber" required>
+                <input type="number" step="1" class="form-control" id="SectionNumber" name="SectionNumber"  required>
                 @error('SectionNumber')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror

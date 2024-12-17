@@ -9,25 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class QuestControl extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         Log::info($request);
@@ -45,12 +27,12 @@ class QuestControl extends Controller
         $store->Why = $request['why'];
         if(isset($request->imagePath)){
             $file = $request->file('imagePath');
-            $file->move(public_path('public'),$file->getClientOriginalName());
-            $store->imagePath = asset('public').'/'.$file->getClientOriginalName();
+            $file->move(public_path('pics'),$file->getClientOriginalName());
+            $store->imagePath = asset('pics').'/'.$file->getClientOriginalName();
         }
 
         $store->CorrectAnswer = $request['correctAnswer'];
-        $store->SectionIDSelected  = $request->sectionNumberSelectedId;
+        $store->SectionIDSelected  = $request->SectionIDSelected;
         $store->save();
         return redirect()->back();
     }
@@ -63,13 +45,7 @@ class QuestControl extends Controller
         Section::create(['title'=>$request->title,'SectionNumber'=>$request->SectionNumber]);
         return redirect()->back();
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(question $question)
-    {
-        //
-    }
+
     public function submitEditedTest(Request $request, $id){
         $data = question::find($id);
         $data->title = $request->title;
@@ -95,7 +71,6 @@ class QuestControl extends Controller
     }
     public function editOneQuestion(Request $question)
     {
-
         return view('editPages.editQuestion');
     }
     public function EditQuestionPage($id)
@@ -108,5 +83,5 @@ class QuestControl extends Controller
         $overlay = view('editPages.editQuestion',['data'=> $data,'options'=>$options, 'section'=> $section,'selectedSection'=>$selectedSection]);
         return view('adminLayout.adminLayout',['content'=>$overlay]);
     }
-    
+
 }

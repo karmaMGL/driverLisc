@@ -1,11 +1,15 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\examPerformance;
+use App\Models\Member;
+use App\Models\performance;
 use App\Models\question;
 use App\Models\roadSign;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminPageControl extends Controller
 {
@@ -18,6 +22,7 @@ class AdminPageControl extends Controller
     }
     public function QuestionAddPage(){
         $webdata = view('adminPages.addQuestion',['data'=>Section::all()]);
+        Log::info(Section::all());
         return view('adminLayout.adminLayout',['content'=>$webdata]);
     }
     public function SectionAddPage(){
@@ -31,9 +36,14 @@ class AdminPageControl extends Controller
 
     public function adminDAshboard(){
         if(Auth::guard('Admin')->check() == true){
-
-            $content = view('adminDashboard.adminDashboard');
-            return view('adminLayout.adminLayout',['content'=>$content]);
+            $data = [];
+            $data = [
+                'members' => Member::all()->count(),
+                'performance' => examPerformance::all()->count(),
+                'sections' => Section::all()->count(),
+                'roadSigns' => roadSign::all()->count(),
+            ];
+            return view('adminLayout.adminLayout',['content'=>view('adminDashboard.adminDashboard',['data'=>$data])]);
         }
         else{
             return redirect('/adminLoginPage');

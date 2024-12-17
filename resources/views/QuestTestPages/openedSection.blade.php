@@ -83,10 +83,14 @@
                 @guest('Member')
                 <a href="{{route('login')}}"><button class="btn btn-dark">Login</button></a>
                 @endguest
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Хайх" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Хайх</button>
+                  </form>
                 @auth('Member')
                 <div class="dropdown show">
                     <div class="dropdown">
-                        <span>Welcome back</span>
+                        <span>Эргээд тавтай морил</span>
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           {{Auth::guard('Member')->user()->name}}
                         </button>
@@ -121,7 +125,7 @@
                 <!-- Main Content -->
                 <div class="col-7 p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2>Section {{$SectionID}}: Road Safety</h2>
+                        <h2>Хэсэг {{$SectionID}}: {{$sectionTitle}}</h2>
                         <div class="d-flex align-items-center">
                             <span class="me-3">Progress</span>
                             <div class="progress" style="width: 100px;">
@@ -132,7 +136,7 @@
                     @foreach ($datas as $data)
 
                     <div id="question-{{$counter}}" class="question-container p-4">
-                        <h5 class="mb-4">Question {{$counter}}</h5>
+                        <h5 class="mb-4">Асуулт {{$counter}}</h5>
                         <p class="text-secondary mb-4">{{$data->Title}}</p>
                         @isset($data->ImagePath)
                         <div class="image-placeholder d-flex align-items-center justify-content-center" style="height: 300px; background: url('{{asset($data->ImagePath)}}') center/contain no-repeat;"></div>
@@ -161,17 +165,17 @@
                 <!-- Right Sidebar -->
                 <div class="col-3 p-4">
                     <div class="performance-card">
-                        <h4 class="mb-4">Performance</h4>
+                        <h4 class="mb-4">Гүйцэтгэл</h4>
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Correct Answers</span>
+                            <span>Зөв хариулсан </span>
                             <span id="correct-count" class="correct-answers fw-bold">0</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Wrong Answers</span>
+                            <span>Буруу хариулсан</span>
                             <span id="incorrect-count" class="wrong-answers fw-bold">0</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Remaining</span>
+                            <span>Үлдсэн</span>
                             <span id="remaining-count" class="fw-bold">{{ count($datas) }}</span>
                         </div>
                         <div class="progress mt-4">

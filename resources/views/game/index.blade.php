@@ -1,4 +1,4 @@
-@section('game')
+{{-- @section('game') --}}
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
@@ -127,4 +127,4 @@
   </body>
 </html>
 
-@endsection
+{{-- @endsection --}}
