@@ -51,9 +51,7 @@ Route::get('/roadSign',[MemberPages::class,'roadSignsPage'])->name('roadSigns');
 Route::get('/contact',[MemberPages::class,'contactUs'])->name('contact');
 // tests section  check correct answer
 
-Route::post('/correctAnswered/{id}/{sectionID}/{answer}/{questID}',[MemberPages::class,'clickedCorrectAnswer'])->name('correctAnswered');
-Route::post('/incorrectAnswered/{id}/{sectionID}/{answer}/{questID}',[MemberPages::class,'clickedInCorrectAnswer'])->name('incorrectAnswered');
-
+Route::post('/record-answer', [MemberPages::class, 'recordAnswer'])->name('recordAnswer');
 Route::get('/member/tests/performance/{isCorrect}/{date}',[MemberPages::class,'examineDate'])->name('member.test.performance.table');
 
 // temperal

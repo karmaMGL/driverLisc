@@ -45,8 +45,7 @@ class examController extends Controller
         $data = ExamPrep::find($examId);
         if( !empty($data) ){
 
-            $oldData = json_decode($data->selectedQuestIDs);
-            Log::info($oldData);
+            $oldData = json_decode($data->selectedQuestIDs,true);
             $oldData[] =  question::find( $QuestId)->id;
             $data->selectedQuestIDs = json_encode($oldData );
             $data->adminID = Auth::guard('Admin')->id();
@@ -56,16 +55,15 @@ class examController extends Controller
         return redirect()->back();
     }
     public function removeQuestFromTempTable($QuestId,$examId){
-        $data = ExamPrep::find($examId);
+        // $data = ExamPrep::find($examId);
 
         if( !empty($data) ){
-            $selectedId = json_decode(ExamPrep::find($examId)->selectedQuestIDs);
+            $selectedId = json_decode(ExamPrep::find($examId)->selectedQuestIDs,true);
             unset($selectedId[array_search($QuestId,$selectedId)]);
             $data->selectedQuestIDs = json_encode($selectedId );
             $data->adminID = Auth::guard('Admin')->id();
             $data->save();
         }
-
         return redirect()->back();
     }
 }

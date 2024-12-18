@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\documents_sections;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class bookController extends Controller

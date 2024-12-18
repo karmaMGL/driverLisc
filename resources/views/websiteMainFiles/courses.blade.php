@@ -144,14 +144,14 @@
                                 <div class="text-center p-4 pt-0">
                                     <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Free</div>
 
-                                    <h5 class="mb-3">{{$sec}} {{$Title[$counter]}}</h5>
+                                    <h5 class="mb-3">{{$sec}}. {{$Title[$counter]}}</h5>
                                     <p>...</p>
                                     <p>Total tests: {{$QuestionCounts[$counter]}}</p>
                                 </div>
                                 <div class="position-relative mt-auto">
                                     <img class="img-fluid" src="websiteMainFiles/img/courses-1.jpg" alt="">
                                     <div class="courses-overlay">
-                                        <a class="btn btn-outline-primary border-2" href="{{route('OpenSection',$sec)}}">Read More</a>
+                                        <a class="btn btn-outline-primary border-2" href="{{route('OpenSection',$sectionID[$counter])}}">Read More</a>
                                     </div>
                                 </div>
                             </div>

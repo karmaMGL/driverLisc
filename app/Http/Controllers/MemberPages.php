@@ -48,11 +48,12 @@ class MemberPages extends Controller
 
         foreach(Section::all() as $SectionOne){
             $SectionNumber[] = $SectionOne->SectionNumber;
+            $sectionID[] = $SectionOne->id;
             $Counts[] = $questions->where('SectionIDSelected',$SectionOne->id)->count();
             $names[] = $SectionOne->title;
         }
 
-        return view("websiteMainFiles.courses",['MatchSection'=>$SectionNumber,'QuestionCounts'=>$Counts,'Title'=>$names]);
+        return view("websiteMainFiles.courses",['MatchSection'=>$SectionNumber,'QuestionCounts'=>$Counts,'Title'=>$names,'sectionID'=>$sectionID]);
     }
     // ---------------------------------------------------------------------> exam stuffs
     public function examSectionPage(){
@@ -127,9 +128,9 @@ class MemberPages extends Controller
     }
 // -----------------------------------------test? idk
     public function openSectionPage($SectionNumber,$questID=null){
-        $dataSec = Section::where('SectionNumber','like',$SectionNumber)->first();
+        $dataSec = Section::find($SectionNumber);
         $id = $dataSec->id;
-        $data = question::where('SectionIDSelected','like',$id)->get();
+        $data = question::where('SectionIDSelected',$id)->get();
         $secID = $dataSec->id;
         return view('QuestTestPages/openedSection',['datas' => $data,'SectionID'=>$secID,'sectionTitle'=>$dataSec->title,'questID'=>$questID]);
     }
@@ -166,6 +167,8 @@ class MemberPages extends Controller
         $data3 = [];
         $allFailedTests = performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',false)->select('questID')->distinct()->get();
         foreach($allFailedTests as $one){
+        Log::alert(question::where('id',$one['questID'])->get());
+
             $failedCount = performance::where('userID',Auth::guard('Member')->user()->id)->where('questID',$one['questID'])->where('isCorrect',false)->get()->count();
             $data3[] = ['label'=>Str::limit(question::find($one['questID'])->Title,7,'...'),'failed'=>$failedCount];
         }
@@ -176,65 +179,63 @@ class MemberPages extends Controller
     public function examineDate($isCorrect,$date){ // i was working here
         Log::alert($isCorrect." ".$date);
         $data = performance::where( 'userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('testTakenDate',$date)->get();
-        $datas = [];
+
         $questIDs = performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get();
         foreach($questIDs as $one){
-            Log::alert($one);
-            $data[] = [
-                'label'=>question::find($one['questID'])->Title,
-                'correct'=>performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('questID',$one['questID'])->get()->count(),
-                'incorrect'=>0,
-                'url'=>'/OpenSection'.'/'.Section::find(question::find($one['questID'])->SectionIDSelected)->id.'/'.$one['questID']
-            ];
+            // Log::alert($one);
+            $number = performance::where('userID',Auth::guard('Member')->user()->id)->where('isCorrect',$isCorrect)->where('questID',$one['questID'])->get()->count();
+            if($number>0){
+                $data[] = [
+                    'label'=>Str::limit(question::find($one['questID'])->Title,10,'...'),
+                    'correct'=> $number ,
+                    'incorrect'=>0,
+                    'url'=>'/OpenSection'.'/'.question::find($one['questID'])->SectionIDSelected.'/'.$one['questID']
+                ];
+            }
         }
-        Log::alert(performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get());
-        return view('MembersPages.layout',[view('MembersPages.graphs',['data'=>$data])]);
+        // Log::alert(performance::where('userID',Auth::guard('Member')->user()->id)->select('questID')->distinct()->get());
+        $sortedData = collect($data)->sortByDesc('correct')->values()->toArray();
+        $sortedData = json_encode($sortedData);
+        $sortedData = json_decode($sortedData,true);
+        return view('MembersPages.layout',[view('MembersPages.graphs',['data'=>$sortedData,'date'=>$date ])]);
     }
-    public function clickedCorrectAnswer(Request $request , $id,$sectionID,$answer,$questID) {
-        $member = Auth::guard('Member')->user();
-        $today = Carbon::now()->format('Y-m-d');
-        $Checkk = performance::where('userID',$member->id)->where('testTakenDate',$today)->first();
-        Log::info($answer);
-
-
-        $newData = new performance;
-        $newData->userID = $member->id;
-        $newData->testTakenDate =  $today;
-        $newData->questID = $questID;
-        $newData->Answered = $answer;
-        $newData->sectionID = $sectionID;
-        $newData->isCorrect = true;
-        $newData->save();
-
-
-        return response()->json([
-            'message' => 'Correct answer recorded',
-            'status' => 'success'
+    public function recordAnswer(Request $request) {
+        Log::alert($request);
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'sectionID' => 'required|integer',
+            'answer' => 'required|string',
+            'questID' => 'required|integer',
+            'isCorrect' => 'required|boolean'
         ]);
+
+        try {
+            $member = Auth::guard('Member')->user();
+            $today = Carbon::now()->format('Y-m-d');
+
+            // Save performance data
+            $performance = new Performance(); // Ensure the model name is correct
+            $performance->userID = $member->id;
+            $performance->testTakenDate = $today;
+            $performance->questID = $validatedData['questID'];
+            $performance->Answered = $validatedData['answer'];
+            $performance->sectionID = $validatedData['sectionID'];
+            $performance->isCorrect = $validatedData['isCorrect'];
+            $performance->save();
+
+            return response()->json([
+                'message' => $validatedData['isCorrect'] ? 'Correct answer recorded' : 'Incorrect answer recorded',
+                'status' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error recording answer',
+                'error' => $e->getMessage(),
+                'status' => 'error'
+            ], 500);
+        }
     }
 
-    public function clickedInCorrectAnswer(Request $request,$id,$sectionID,$answer,$questID) {
-
-        $member = Auth::guard('Member')->user();
-        $today = Carbon::now()->format('Y-m-d');
-        $Checkk = performance::where('userID',$member->id)->where('testTakenDate',$today)->first();
-        Log::info($answer);
-
-        $newData = new performance;
-        $newData->userID = $member->id;
-        $newData->testTakenDate =  $today;
-        $newData->questID = $questID;
-        $newData->Answered = $answer;
-        $newData->sectionID = $sectionID;
-        $newData->isCorrect = false;
-        $newData->save();
-
-
-        return response()->json([
-            'message' => 'Incorrect answer recorded',
-            'status' => 'error'
-        ]);
-    }
     public function contactUs(){
         session(['member'=>'contact']);
         return view('websiteMainFiles.contact');

@@ -52,7 +52,7 @@
             <!-- Explanation -->
             <div class="mb-3">
                 <label for="explanation" class="form-label fw-bold">Explanation</label>
-                <textarea id="explanation" name="why" rows="4" class="form-control" placeholder="Explain why this is the correct answer" required></textarea>
+                <textarea id="explanation" name="why" rows="4" class="form-control" placeholder="Explain why this is the correct answer" ></textarea>
             </div>
             {{-- <input type="hidden" name="SectionIDSelected" value="{{$data}}"> --}}
             <!-- Submit Button -->

@@ -7,7 +7,7 @@
     var data = @json($data);
 
     // Set dimensions and margins for the chart
-    var width = screen.width, height = 400, margin = 50;
+    var width = screen.width /100 *70, height = 400, margin = 50;
 
     // Create an SVG container
     var svg = d3.select("#chart")
@@ -144,7 +144,7 @@ bars.selectAll(".bar.incorrect")
         .attr("text-anchor", "middle")
         .attr("font-size", "18px")
         .attr("font-weight", "bold")
-        .text("Player Performance: Correct vs. Incorrect");
+        .text("{{$date}}");
 
     // Tooltip functionality
     var tooltip = d3.select("#chart")

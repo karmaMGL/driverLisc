@@ -75,10 +75,12 @@
             <!-- Sidebar -->
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
                 <div class="position-sticky">
-                    <div class="sidebar-logo d-flex align-items-center">
-                        <i class="bi bi-hurricane me-2"></i>
-                        <span>Breeze</span>
-                    </div>
+                    <a href="{{route('main')}}" class="sidebar-logo d-flex align-items-center" style="text-decoration: none">
+                        <div class="sidebar-logo d-flex align-items-center">
+                            <i class="bi bi-hurricane me-2"></i>
+                            <span>Breeze</span>
+                        </div>
+                    </a>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="{{route('MemberDashboard')}}">

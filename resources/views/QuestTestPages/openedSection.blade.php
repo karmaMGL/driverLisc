@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Driving Test Portal</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             /* Sticky Sidebar */
@@ -97,7 +98,7 @@
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" href="#">Profile</a></li>
                           <li><a class="dropdown-item" href="#">Settings</a></li>
-                          <li><a class="dropdown-item" href="#">Logout</a></li>
+                          <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
                         </ul>
                       </div>
                   </div>
@@ -136,7 +137,7 @@
                     @foreach ($datas as $data)
 
                     <div id="question-{{$counter}}" class="question-container p-4">
-                        <h5 class="mb-4">Асуулт {{$counter}}</h5>
+                        <h5 id="questionID-{{$data->id}}" class="mb-4 ">Асуулт {{$counter}}</h5>
                         <p class="text-secondary mb-4">{{$data->Title}}</p>
                         @isset($data->ImagePath)
                         <div class="image-placeholder d-flex align-items-center justify-content-center" style="height: 300px; background: url('{{asset($data->ImagePath)}}') center/contain no-repeat;"></div>
@@ -147,7 +148,7 @@
                                 shuffle($options);
                             @endphp
                             @foreach ($options as $item)
-                            <div class="answer-option" onclick='checkAnswer({{$counter}}, "{{$item}}", "{{$data->CorrectAnswer}}")'>
+                            <div class="answer-option" onclick='checkAnswer({{$counter}}, {{$data->id;}}, "{{$item}}", "{{$data->CorrectAnswer}}")'>
                                 {{$item}}
                             </div>
                             @endforeach
@@ -186,10 +187,11 @@
             </div>
         </div>
         @isset($questID)
+
             <script>
                 window.addEventListener('DOMContentLoaded', () => {
                     const questID = {{$questID}}; // Get the questID passed from PHP
-                    const questionElement = document.getElementById(`question-${questID}`); // Find the element by ID
+                    const questionElement = document.getElementById(`questionID-${questID}`); // Find the element by ID
 
                     if (questionElement) {
                         questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to the question
@@ -207,6 +209,7 @@
             const correctCountElement = document.getElementById('correct-count');
             const incorrectCountElement = document.getElementById('incorrect-count');
             const remainingCountElement = document.getElementById('remaining-count');
+            const sectionID = {{ $SectionID }};
 
             // Update performance and progress
             function updateProgress() {
@@ -223,17 +226,48 @@
                 incorrectCountElement.textContent = incorrectCount;
             }
 
+            // Send answer to server
+            async function sendAnswerToServer(isCorrect, questID , sectionID,selectedAnswer ) {
+                try {
+                    const response = await fetch('{{ route('recordAnswer', ['id' => 0, 'sectionID' => 0, 'answer' => 'placeholder', 'questID' => 0, 'isCorrect' => 0]) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+                        },
+                        body: JSON.stringify({
+                            sectionID: sectionID,
+                            answer: selectedAnswer,
+                            questID: questID,
+                            isCorrect: isCorrect
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Server Error: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Server Response:', result);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+
             // Check answer and provide feedback
-            function checkAnswer(questionNumber, selectedAnswer, correctAnswer) {
+            function checkAnswer(questionNumber,questID, selectedAnswer, correctAnswer) {
+                console.log(questionNumber, questID, selectedAnswer, correctAnswer);
                 const feedbackElement = document.getElementById(`feedback-${questionNumber}`);
                 const explanationElement = document.getElementById(`explanation-${questionNumber}`);
 
                 if (selectedAnswer === correctAnswer) {
                     feedbackElement.innerHTML = "<strong class='text-success'>Correct!</strong>";
                     correctCount++;
+                    sendAnswerToServer(true, questID, sectionID, selectedAnswer);
                 } else {
                     feedbackElement.innerHTML = `<strong class='text-danger'>Incorrect!</strong> Correct answer: ${correctAnswer}`;
                     incorrectCount++;
+                    sendAnswerToServer(false, questID, sectionID, selectedAnswer);
                 }
 
                 explanationElement.style.display = "block";
@@ -245,6 +279,7 @@
                 });
             }
         </script>
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>

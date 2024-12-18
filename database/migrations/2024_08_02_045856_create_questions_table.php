@@ -17,9 +17,9 @@ return new class extends Migration
             $table->float("SectionIDSelected");
             $table->string("Title");
             $table->string("ImagePath")->nullable(true);
-            $table->string("Options");
+            $table->text("Options");
             $table->string("CorrectAnswer");
-            $table->string("Why");
+            $table->text("Why")->nullable(true);
         });
     }
 
